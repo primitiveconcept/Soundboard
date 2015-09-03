@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="SoundboardDB.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
+        <EntityContainer Name="SoundboardDBTargetContainer" >
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="SoundboardDB" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="SoundboardDBContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SoundFiles" EntityType="SoundboardDB.SoundFile" />
+          <EntitySet Name="Channels" EntityType="SoundboardDB.Channel" />
+          <EntitySet Name="SoundRecords" EntityType="SoundboardDB.SoundRecord" />
+          <AssociationSet Name="SoundRecordSoundFile" Association="SoundboardDB.SoundRecordSoundFile">
+            <End Role="SoundRecord" EntitySet="SoundRecords" />
+            <End Role="SoundFile" EntitySet="SoundFiles" />
+          </AssociationSet>
+          <EntitySet Name="SoundTags" EntityType="SoundboardDB.SoundTag" />
+          <EntitySet Name="Availabilities" EntityType="SoundboardDB.Availability" />
+          <AssociationSet Name="SoundFileAvailability" Association="SoundboardDB.SoundFileAvailability">
+            <End Role="SoundFile" EntitySet="SoundFiles" />
+            <End Role="Availability" EntitySet="Availabilities" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SoundFile">
+          <Key>
+            <PropertyRef Name="SoundFileId" />
+          </Key>
+          <Property Name="SoundFileId" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Duration" Type="String" Nullable="true" />
+          <NavigationProperty Name="SoundRecord" Relationship="SoundboardDB.SoundRecordSoundFile" FromRole="SoundFile" ToRole="SoundRecord" />
+          <Property Name="Availability" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Availabilities" Relationship="SoundboardDB.SoundFileAvailability" FromRole="SoundFile" ToRole="Availability" />
+        </EntityType>
+        <EntityType Name="Channel">
+          <Key>
+            <PropertyRef Name="ChannelId" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="ChannelId" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="128" />
+          <Property Name="LockExpiration" Type="Int16" Nullable="true" />
+        </EntityType>
+        <EntityType Name="SoundRecord">
+          <Key>
+            <PropertyRef Name="SoundRecordId" />
+          </Key>
+          <Property Name="SoundRecordId" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="SoundFile" Type="String" Nullable="false" />
+          <NavigationProperty Name="SoundFiles" Relationship="SoundboardDB.SoundRecordSoundFile" FromRole="SoundRecord" ToRole="SoundFile" />
+        </EntityType>
+        <Association Name="SoundRecordSoundFile">
+          <End Type="SoundboardDB.SoundRecord" Role="SoundRecord" Multiplicity="*" />
+          <End Type="SoundboardDB.SoundFile" Role="SoundFile" Multiplicity="0..1" />
+        </Association>
+        <EntityType Name="SoundTag">
+          <Key>
+            <PropertyRef Name="SoundTagId" />
+          </Key>
+          <Property Name="SoundTagId" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="Availability">
+          <Key>
+            <PropertyRef Name="AvailabilityId" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="AvailabilityId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="256" />
+          <NavigationProperty Name="SoundFile" Relationship="SoundboardDB.SoundFileAvailability" FromRole="Availability" ToRole="SoundFile" />
+        </EntityType>
+        <Association Name="SoundFileAvailability">
+          <End Type="SoundboardDB.SoundFile" Role="SoundFile" Multiplicity="1" />
+          <End Type="SoundboardDB.Availability" Role="Availability" Multiplicity="1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="SoundboardDB" />
+        <Alias Key="Target" Value="SoundboardDB.Store" />
+        <EntityContainerMapping CdmEntityContainer="SoundboardDBContainer" StorageEntityContainer="SoundboardDBTargetContainer">
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
